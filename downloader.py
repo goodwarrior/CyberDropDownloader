@@ -42,7 +42,7 @@ def download(passed_from_main):
     _path = passed_from_main[0]
     _item = passed_from_main[1]
     attempts = 1
-    attemptsToTry = settings.file_attempts + 1
+    attemptsToTry = (settings.file_attempts + 1) if settings.file_attempts != 0 else 0
     try:
         while True:
             filename = _item[_item.rfind("/") + 1:]
@@ -62,6 +62,7 @@ def download(passed_from_main):
                     incomingFileSize = int(response.headers['Content-length'])
 
                     if os.path.isfile(_path + str(filename)):
+                        log("Test #1", Fore.RED)
                         storedFileSize = os.path.getsize(_path + str(filename))
                         if incomingFileSize == storedFileSize:
                             log("           " + filename + " already exists.", Fore.LIGHTBLACK_EX)
@@ -73,11 +74,14 @@ def download(passed_from_main):
                     log("        Downloading " + filename + "...", Fore.LIGHTBLACK_EX)
 
                     with open(_path + str(filename), "wb") as out_file:
+                        log("Test #2", Fore.RED)
                         for chunk in response.iter_content(chunk_size=50000):
                             if chunk:
                                 out_file.write(chunk)
+                    out_file.close()
                     del response
                     if os.path.isfile(_path + str(filename)):
+                        log("Test #3", Fore.RED)
                         storedFileSize = os.path.getsize(_path + str(filename))
                         if incomingFileSize == storedFileSize:
                             log("        Finished " + filename, Fore.GREEN)
@@ -89,7 +93,7 @@ def download(passed_from_main):
                         log("        Something went wrong" + " for " + filename, Fore.RED)
                         attempts += 1
                 except Exception as e:
-                    # log(e, Fore.RED)
+                    log(e, Fore.RED)
                     os.remove(_path + str(filename))
                     log("        Failed attempt " + str(attempts) + " for " + filename, Fore.RED)
                     attempts += 1
@@ -104,7 +108,7 @@ if __name__ == '__main__':
 
     response = requests.get("https://api.github.com/repos/Jules-WinnfieldX/CyberDropDownloader/releases/latest")
     latestVersion = response.json()["tag_name"]
-    currentVersion = "1.3.1"
+    currentVersion = "1.3.2"
 
     if latestVersion != currentVersion:
         print("A new version of CyberDropDownloader is available\n"

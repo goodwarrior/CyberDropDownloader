@@ -9,6 +9,10 @@ from geturls import Extrair_Links
 from multiprocessing import Pool
 import multiprocessing
 import settings
+from urllib3.exceptions import InsecureRequestWarning
+
+# Suppress only the single warning from urllib3 needed.
+requests.packages.urllib3.disable_warnings(category=InsecureRequestWarning)
 
 
 class Error(Exception):
@@ -58,7 +62,7 @@ def download(passed_from_main):
                     if filename == "cyberdrop.me-downloaders":
                         break
 
-                    response = requests.get(_url, stream=True)
+                    response = requests.get(_url, stream=True, verify=False)
                     incomingFileSize = int(response.headers['Content-length'])
 
                     if os.path.isfile(_path + str(filename)):

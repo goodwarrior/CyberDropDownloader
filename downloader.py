@@ -93,7 +93,7 @@ def download(passed_from_main):
                         log("        Something went wrong" + " for " + filename, Fore.RED)
                         attempts += 1
                 except Exception as e:
-                    # log(e, Fore.RED)
+                    log(e, Fore.RED)
                     os.remove(_path + str(filename))
                     log("        Failed attempt " + str(attempts) + " for " + filename, Fore.RED)
                     attempts += 1

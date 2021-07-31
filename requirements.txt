@@ -8,7 +8,7 @@ clint==0.5.1
 colorama==0.4.3
 idna==2.8
 isort==4.3.21
-lazy-object-proxy==1.4.3
+lazy-object-proxy
 mccabe==0.6.1
 pylint==2.4.4
 six==1.13.0
